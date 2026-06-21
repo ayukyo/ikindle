@@ -54,6 +54,7 @@ run_test "Python 依赖 (cnlunar)" "python3 -c 'import cnlunar'"
 run_test "单元测试 (test_calendar.py)" "python3 -m unittest tests.test_calendar -v"
 run_test "单元测试 (test_festivals.py)" "python3 -m unittest tests.test_festivals -v"
 run_test "集成测试 (test_build.py)" "python3 -m unittest tests.test_build -v"
+run_test "集成测试 (test_hitokoto.py)" "python3 -m unittest tests.test_hitokoto -v"
 
 # ---- 4. 端到端 ----
 run_test "端到端构建 (build.sh)" "bash build.sh"
