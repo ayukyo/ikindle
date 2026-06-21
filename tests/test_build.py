@@ -17,7 +17,10 @@ class TestBuild(unittest.TestCase):
         """build.sh 应能成功执行"""
         result = subprocess.run(
             ['bash', 'build.sh'],
-            capture_output=True, text=True, timeout=30
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30
         )
         self.assertEqual(result.returncode, 0, f"build.sh 失败: {result.stderr}")
 
@@ -58,7 +61,9 @@ class TestBuild(unittest.TestCase):
         """2026-06-21 应显示夏至节气"""
         result = subprocess.run(
             ['bash', '-c', 'LUNAR_DATE=2026-06-21 python3 lunar.py'],
-            capture_output=True, text=True
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True
         )
         self.assertIn('夏至', result.stdout, f"2026-06-21 应输出夏至，实际: {result.stdout}")
 
