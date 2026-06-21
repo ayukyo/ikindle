@@ -92,6 +92,9 @@ if command -v google-chrome >/dev/null 2>&1; then
     echo ""
 fi
 
+# ---- 6. E-Ink 灰度模拟截图（CSS filter 模拟 16 级灰阶墨水屏）----
+run_test "E-Ink 灰度模拟截图 (eink_screenshot.py)" "python3 tests/eink_screenshot.py"
+
 echo "═══════════════════════════════════════════════════════════"
 echo "  测试结果: $PASS 通过 / $FAIL 失败"
 echo "═══════════════════════════════════════════════════════════"
