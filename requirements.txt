@@ -1,0 +1,5 @@
+# iKindle dependencies
+#
+# 安装：pip3 install -r requirements.txt
+# 注意：lunar.py 依赖 cnlunar 计算农历/节气；缺失时降级返回空串（构建仍可继续）
+cnlunar>=0.2,<1.0

@@ -47,6 +47,9 @@ run_test "JS 语法 (app.js)" "node --check app.js"
 run_test "JSON 语法 (festivals.json)" "python3 -c \"import json; json.load(open('festivals.json'))\""
 run_test "JSON 语法 (hitokoto_cache.json)" "python3 -c \"import json; json.load(open('hitokoto_cache.json'))\""
 
+# ---- 2.5 Python 依赖检查（避免 lunar.py 静默降级）----
+run_test "Python 依赖 (cnlunar)" "python3 -c 'import cnlunar'"
+
 # ---- 3. 单元测试 ----
 run_test "单元测试 (test_calendar.py)" "python3 -m unittest tests.test_calendar -v"
 run_test "单元测试 (test_festivals.py)" "python3 -m unittest tests.test_festivals -v"
