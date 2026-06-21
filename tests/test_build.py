@@ -90,11 +90,12 @@ class TestBuild(unittest.TestCase):
 
     def test_no_ampm_in_sunrise_sunset(self):
         """VIS-004：日出日落不应包含 AM/PM（应统一 24h 制）"""
+        # 默认读当前 dashboard.html（可能是中文或英文，看测试顺序）
         with open('dashboard.html', 'r') as f:
             content = f.read()
-        # 找到日出日落那行
+        # 找到日出日落那行（中英文都试）
         import re
-        m = re.search(r'日出\s*[^<]*日落\s*[^<]*', content)
+        m = re.search(r'(?:日出|Sunrise)\s*[^<]*(?:日落|Sunset)\s*[^<]*', content)
         self.assertIsNotNone(m, "未找到日出日落文本")
         text = m.group(0)
         self.assertNotIn('AM', text, f"日出日落仍含 AM: {text}")
@@ -113,7 +114,16 @@ class TestBuild(unittest.TestCase):
         )
 
     def test_dashboard_has_required_elements(self):
-        """dashboard.html 应包含必需元素"""
+        """dashboard.html 应包含必需元素（中文版）"""
+        # 强制用中文 build 一遍
+        subprocess.run(
+            ['bash', 'build.sh'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30,
+            env={**os.environ, 'I18N_LANG': 'zh'}
+        )
         with open('dashboard.html', 'r') as f:
             content = f.read()
         required = [
@@ -132,6 +142,34 @@ class TestBuild(unittest.TestCase):
         ]
         for elem in required:
             self.assertIn(elem, content, f"缺失元素: {elem}")
+
+    def test_dashboard_en_has_english_elements(self):
+        """英文版 dashboard.html 应包含英文元素"""
+        subprocess.run(
+            ['bash', 'build.sh'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30,
+            env={**os.environ, 'I18N_LANG': 'en'}
+        )
+        with open('dashboard.html', 'r') as f:
+            content = f.read()
+        required_en = [
+            '<title>iKindle Calendar</title>',
+            '<html lang="en">',
+            'Sun',  # weekday
+            'Mon',
+            'Week ',  # 周数
+            'Sunrise ',  # 日出日落
+            'No festival today',  # 兜底
+            'No upcoming countdown',
+        ]
+        for elem in required_en:
+            self.assertIn(elem, content, f"英文版缺失元素: {elem}")
+        # 关键的中文文案不该出现在英文版
+        self.assertNotIn('今日无节日', content, "英文版不应含 '今日无节日'")
+        self.assertNotIn('加载中', content, "英文版不应含 '加载中'")
 
     def test_lunar_2026_summer_solstice(self):
         """2026-06-21 应显示夏至节气"""

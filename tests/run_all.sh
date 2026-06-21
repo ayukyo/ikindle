@@ -53,12 +53,18 @@ run_test "Python 依赖 (cnlunar)" "python3 -c 'import cnlunar'"
 # ---- 3. 单元测试 ----
 run_test "单元测试 (test_calendar.py)" "python3 -m unittest tests.test_calendar -v"
 run_test "单元测试 (test_festivals.py)" "python3 -m unittest tests.test_festivals -v"
+run_test "单元测试 (test_i18n.py)" "python3 -m unittest tests.test_i18n -v"
 run_test "集成测试 (test_build.py)" "python3 -m unittest tests.test_build -v"
 run_test "集成测试 (test_hitokoto.py)" "python3 -m unittest tests.test_hitokoto -v"
 
 # ---- 4. 端到端 ----
 run_test "端到端构建 (build.sh)" "bash build.sh"
-run_test "dashboard.html 完整性" "test -f dashboard.html && grep -q '加载中' dashboard.html && ! grep -q '{{' dashboard.html"
+# 注：天气区'加载中'是 i18n 占位符 {{LOADING}}，构建后被替换为 '加载中...' (zh) 或 'Loading...' (en)
+# 强制中文 build 后检查
+run_test "dashboard.html 完整性 (zh)" "I18N_LANG=zh bash build.sh > /dev/null && test -f dashboard.html && grep -q '加载中\\.\\.\\.' dashboard.html && ! grep -q '{{' dashboard.html"
+run_test "dashboard.html 完整性 (en)" "I18N_LANG=en bash build.sh > /dev/null && grep -q 'Loading\\.\\.\\.' dashboard.html && ! grep -q '{{' dashboard.html"
+# 恢复中文版（默认）
+I18N_LANG=zh bash build.sh > /dev/null
 
 # ---- 5. KWP4 模拟（用 Chrome headless）----
 if command -v google-chrome >/dev/null 2>&1; then
