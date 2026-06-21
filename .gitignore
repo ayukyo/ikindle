@@ -26,3 +26,6 @@ Thumbs.db
 *.key
 *.pem
 /.icode_output_*/
+state.json
+
+# dev-agent 内部项目档案（不同步到仓库）
