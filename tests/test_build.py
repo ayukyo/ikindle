@@ -14,7 +14,7 @@ class TestBuild(unittest.TestCase):
     """build.sh 端到端测试"""
 
     def test_build_script_runs(self):
-        """build.sh 应能成功执行"""
+        """build.sh 应能成功执行（无 CITY 环境变量）"""
         result = subprocess.run(
             ['bash', 'build.sh'],
             stdout=subprocess.PIPE,
@@ -23,6 +23,52 @@ class TestBuild(unittest.TestCase):
             timeout=30
         )
         self.assertEqual(result.returncode, 0, f"build.sh 失败: {result.stderr}")
+
+    def test_build_with_city_env_var(self):
+        """VIS-005：build.sh 应支持 CITY 环境变量"""
+        result = subprocess.run(
+            ['bash', 'build.sh'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30,
+            env={**os.environ, 'CITY': 'Beijing'}
+        )
+        self.assertEqual(result.returncode, 0,
+                         f"CITY=Beijing build.sh 失败: {result.stderr}")
+        self.assertIn('CITY=Beijing', result.stdout,
+                      "日志应记录 CITY=Beijing")
+
+    def test_build_with_chinese_city(self):
+        """VIS-005：build.sh 应支持中文城市名"""
+        result = subprocess.run(
+            ['bash', 'build.sh'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30,
+            env={**os.environ, 'CITY': '上海'}
+        )
+        self.assertEqual(result.returncode, 0,
+                         f"CITY=上海 build.sh 失败: {result.stderr}")
+        # 中文 URL-encode 后是 %E4%B8%8A%E6%B5%B7（encoded= 字段）
+        self.assertIn('encoded=%E4%B8%8A%E6%B5%B7', result.stdout,
+                      "中文城市应 URL-encode 后传给 wttr.in")
+
+    def test_dashboard_has_location_element(self):
+        """VIS-005：dashboard.html 应包含 .location 元素"""
+        subprocess.run(
+            ['bash', 'build.sh'],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+            timeout=30,
+            env={**os.environ, 'CITY': 'Beijing'}
+        )
+        with open('dashboard.html', 'r') as f:
+            content = f.read()
+        self.assertIn('class="location"', content, "缺失 .location 元素")
+        self.assertNotIn('{{LOCATION}}', content, "{{LOCATION}} 未替换")
 
     def test_dashboard_html_created(self):
         """build.sh 应生成 dashboard.html"""

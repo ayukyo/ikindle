@@ -53,17 +53,33 @@ log "农历: $LUNAR_INFO"
 CALENDAR_MONTH=$(date "+%Y年%m月")
 CALENDAR_HTML=$(python3 "$PROJECT_DIR/generate_calendar.py" 2>/dev/null || echo "")
 
-# ---- 4. 日出日落（尝试 wttr.in j1，失败降级）----
+# ---- 4. 日出日落（VIS-005 城市定位 + VIS-004 24h 制）----
 SUNRISE_SUNSET=""
-WTTR_JSON=$(curl -s --max-time 8 "https://wttr.in/?format=j1" 2>/dev/null || echo "")
+LOCATION=""
+CITY_SOURCE=""  # 记录定位来源，用于日志和兜底
+
+# wttr.in URL：支持 /<city> 路径传城市名（也支持 IP 反查）
+# 注：CITY 可能未设置（set -u 时会抛 unbound），用 ${CITY:-} 兜底
+if [ -n "${CITY:-}" ]; then
+    # 用户显式指定城市：URL-encode 空格为 %20 / 中文为 UTF-8
+    CITY_ENCODED=$(python3 -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "$CITY")
+    WTTR_URL="https://wttr.in/${CITY_ENCODED}?format=j1"
+    CITY_SOURCE="env:CITY=$CITY"
+else
+    # 未指定：默认按服务器 IP 定位（兜底，对国内用户可能不准确）
+    WTTR_URL="https://wttr.in/?format=j1"
+    CITY_SOURCE="ip-fallback"
+fi
+log "日出日落查询: $WTTR_URL ($CITY_SOURCE, encoded=${CITY_ENCODED:-none})"
+
+WTTR_JSON=$(curl -s --max-time 8 "$WTTR_URL" 2>/dev/null || echo "")
 if [ -n "$WTTR_JSON" ] && command -v python3 >/dev/null 2>&1; then
-    SUNRISE_SUNSET=$(echo "$WTTR_JSON" | python3 -c "
+    WTTR_RESULT=$(echo "$WTTR_JSON" | python3 -c "
 import json, sys, re
 def to_24h(s):
-    # VIS-004：wttr.in 返回 '05:45 AM' / '08:37 PM'，转 24 小时制
     m = re.match(r'(\d{1,2}):(\d{2})\s*(AM|PM)', s.strip(), re.IGNORECASE)
     if not m:
-        return s  # 已是非 AM/PM 格式，原样返回
+        return s
     h, mi, ap = int(m.group(1)), m.group(2), m.group(3).upper()
     if ap == 'PM' and h != 12:
         h += 12
@@ -75,14 +91,49 @@ try:
     today = d['weather'][0]
     sunrise = to_24h(today['astronomy'][0]['sunrise'])
     sunset = to_24h(today['astronomy'][0]['sunset'])
-    print('日出 ' + sunrise + ' / 日落 ' + sunset)
+    area = d.get('nearest_area', [{}])[0]
+    city_name = area.get('areaName', [{}])[0].get('value', '')
+    country = area.get('country', [{}])[0].get('value', '')
+    sun_str = '日出 ' + sunrise + ' / 日落 ' + sunset
+    loc_str = ''
+    if city_name:
+        loc_str = city_name
+        if country and country != city_name:
+            loc_str += ' / ' + country
+    print(sun_str + '^^^' + loc_str)
 except Exception:
     pass
 " 2>/dev/null || echo "")
+    # 用 sed 切：第一个 ^^^ 之前的部分作为 sunrise-sunset，之后作为 location
+    SUNRISE_SUNSET=$(echo "$WTTR_RESULT" | sed 's/\^\^\^.*//')
+    LOCATION=$(echo "$WTTR_RESULT" | sed 's/.*\^\^\^//')
 fi
-# VIS-005：当前 wttr.in 默认按服务器 IP 定位（非用户城市），输出时间仅供参考。
-# 真正的城市定位功能（用户指定/自动 IP 定位）将在 v0.2.0 实现。
+
+# 兜底：API 失败或解析失败时显示
+if [ -z "$SUNRISE_SUNSET" ]; then
+    if [ -n "${CITY:-}" ]; then
+        SUNRISE_SUNSET="日出日落暂不可用（城市: $CITY）"
+        LOCATION="定位失败"
+    else
+        SUNRISE_SUNSET="日出日落暂不可用（未配置城市）"
+        LOCATION="未配置城市"
+    fi
+fi
+
+# LOCATION 加来源标识（让用户知道数据是否可信）
+if [ -n "${CITY:-}" ] && [ -n "$LOCATION" ] && [ "$LOCATION" != "定位失败" ]; then
+    # 用户显式指定 + 解析成功 → 显示 "城市 / 国家"
+    LOCATION_DISPLAY="$LOCATION"
+elif [ -z "${CITY:-}" ] && [ -n "$LOCATION" ]; then
+    # IP 兜底 → 加 "（IP 定位，可能不准确）" 警告
+    LOCATION_DISPLAY="$LOCATION （IP 定位）"
+else
+    LOCATION_DISPLAY="$LOCATION"
+fi
+LOCATION="$LOCATION_DISPLAY"
+
 log "日出日落: $SUNRISE_SUNSET"
+log "城市定位: $LOCATION"
 
 # ---- 5. 节日 / Hitokoto ----
 FESTIVALS_TODAY=""
@@ -161,6 +212,7 @@ replacements = {
     'CALENDAR_MONTH': """$CALENDAR_MONTH""",
     'CALENDAR': """$CALENDAR_HTML""",
     'SUNRISE_SUNSET': """$SUNRISE_SUNSET""",
+    'LOCATION': """$LOCATION""",
     'FESTIVALS_TODAY': """$FESTIVALS_TODAY""",
     'COUNTDOWN': """$COUNTDOWN""",
     'HITOKOTO': """$HITOKOTO"""

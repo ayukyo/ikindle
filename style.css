@@ -113,6 +113,13 @@ body {
     margin-bottom: 1.5vw;
 }
 
+.location {
+    font-size: 1.8vw;
+    text-align: center;
+    color: #555555;
+    margin-bottom: 0.8vw;
+}
+
 .sunrise-sunset {
     font-size: 2vw;
     text-align: center;
