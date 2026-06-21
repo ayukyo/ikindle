@@ -1,0 +1,28 @@
+# Build artifacts
+/build/
+*.log
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Local preview server
+*.pid
+
+# Secrets (do not commit credentials)
+/deploy/secrets/
+*.key
+*.pem
+/.icode_output_*/

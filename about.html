@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>关于 —— iKindle</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iKindle 项目背景、致谢、License。">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://kindle.91api.vip/about.html">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<article class="static-page">
+    <h1>关于 iKindle</h1>
+
+    <h2>背景</h2>
+    <p>iKindle 诞生于一个简单的想法：把一台闲置的 6 寸 KINDLE Paperwhite 4 改造成桌面常驻的"信息仪表盘"。墨水屏不发光、护眼、可长时间显示静态画面 —— 比任何 LCD / OLED 屏幕都更适合作为床头 / 书桌台历。</p>
+
+    <h2>灵感来源</h2>
+    <ul>
+        <li><a href="https://github.com/ypcrts/online-screensaver" rel="external">online-screensaver</a> —— KINDLE 屏保替换项目</li>
+        <li><a href="https://github.com/chubin/wttr.in" rel="external">wttr.in</a> —— 终端天气查询工具（CORS 友好）</li>
+        <li><a href="https://wiki.mobileread.com/wiki/Kindle_Touch_Hacking" rel="external">MobileRead Kindle Hacking Wiki</a> —— KWP4 浏览器兼容性资料</li>
+    </ul>
+
+    <h2>技术决策</h2>
+    <p>项目严格遵循以下约束：</p>
+    <ul>
+        <li><strong>KINDLE 浏览器兼容</strong>：WebKit 537.36（~Chromium 28-35 时代），禁用 ES6+ / CSS 变量 / Grid / sticky</li>
+        <li><strong>零服务依赖</strong>：仅依赖 nginx + cron + bash + curl</li>
+        <li><strong>数据获取</strong>：构建期注入 + 客户端 ES5 XHR 双轨制</li>
+        <li><strong>E-Ink 友好</strong>：白底 / 纯黑加粗衬线 / 远距离可读 / 整页 reload</li>
+    </ul>
+
+    <h2>License</h2>
+    <p>本项目采用 <strong>MIT License</strong>。详见 <a href="https://github.com/" rel="external">GitHub 仓库</a> LICENSE 文件。</p>
+
+    <h2>致谢</h2>
+    <ul>
+        <li>wttr.in 团队 —— 免费的天气 API + CORS 友好</li>
+        <li>Hitokoto —— 每日一言的开源 API</li>
+        <li>cnlunar 库 —— Python 农历 / 干支计算</li>
+        <li>Let's Encrypt —— 免费 HTTPS 证书</li>
+    </ul>
+
+    <p><a href="index.html">← 返回首页</a></p>
+</article>
+</body>
+</html>

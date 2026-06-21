@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>iKindle —— E-Ink Dashboard for 6-inch Kindle Paperwhite 4+</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iKindle —— Transform a 6-inch Kindle Paperwhite 4+ into a desktop e-ink dashboard. Auto-locate city, display time, lunar calendar, festivals, weather, Hitokoto. Open source, zero JS + ES5 enhanced.">
+<meta name="keywords" content="kindle, dashboard, paperwhite, e-ink, calendar, weather, lunar, hitokoto, offline, screensaver">
+<meta name="robots" content="index, follow">
+<meta name="author" content="iKindle Contributors">
+
+<meta property="og:title" content="iKindle —— 6-inch Kindle E-Ink Dashboard">
+<meta property="og:description" content="Turn your Kindle into a desktop dashboard. E-ink style, auto-locate city, zero JS + ES5 enhanced.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kindle.91api.vip/en/">
+
+<link rel="canonical" href="https://kindle.91api.vip/en/">
+<link rel="alternate" hreflang="zh-CN" href="https://kindle.91api.vip/">
+<link rel="alternate" hreflang="en" href="https://kindle.91api.vip/en/">
+
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<article class="static-page">
+    <h1>iKindle —— 6-inch Kindle E-Ink Dashboard</h1>
+    <p>Transform a <strong>Kindle Paperwhite 4+ (2018 or newer)</strong> into a <strong>desktop calendar / information dashboard</strong>. Leveraging the e-ink physical properties (no backlight, eye-friendly, long-time static display, paper-like reading), perfect for bedside / desk / office as a permanent display.</p>
+
+    <h2>✨ Features</h2>
+    <ul>
+        <li>🕐 <strong>Time</strong> —— Current time + date + lunar calendar (e.g. 丙午年五月初七)</li>
+        <li>📅 <strong>Calendar</strong> —— Monthly grid with today highlighted, ISO week number</li>
+        <li>🌦️ <strong>Weather</strong> —— Auto-locate city by IP via wttr.in, refresh every 60s</li>
+        <li>🎉 <strong>Festivals</strong> —— Chinese New Year / Dragon Boat / Mid-Autumn / National Day</li>
+        <li>🌅 <strong>Sunrise/Sunset</strong> —— Real-time astronomical data</li>
+        <li>💬 <strong>Hitokoto</strong> —— Daily quote (cron refreshed at 0:00)</li>
+        <li>📴 <strong>Offline indicator</strong> —— Graceful degradation when network drops</li>
+    </ul>
+
+    <h2>🚀 Quick Access</h2>
+    <ul>
+        <li><a href="../dashboard.html">📺 Dashboard</a> —— KINDLE browser entry point</li>
+        <li><a href="../install.html">📖 Install Guide</a> —— Aliyun / Self-hosted</li>
+        <li><a href="../screenshots.html">🖼️ Screenshots</a></li>
+        <li><a href="../changelog.html">📜 Changelog</a></li>
+        <li><a href="../about.html">ℹ️ About</a></li>
+    </ul>
+
+    <h2>🎯 Target Devices</h2>
+    <p>Kindle Paperwhite 4 (2018) / KPW5 / KPW Signature / Kindle Basic 11th / Kindle Scribe (same-era Oasis / Basic 10 / Colorsoft browsers share the same WebKit 537.36 kernel and are also compatible).</p>
+
+    <h2>📦 Tech Stack</h2>
+    <ul>
+        <li><strong>Frontend</strong>: HTML5 + CSS3 + ES5 JavaScript (Kindle WebKit 537.36 compatible)</li>
+        <li><strong>Build</strong>: cron + bash + sed + curl + Python <code>cnlunar</code></li>
+        <li><strong>Deploy</strong>: Aliyun Linux + nginx + Let's Encrypt + certbot</li>
+        <li><strong>Data sources</strong>: wttr.in (IP auto-locate) + v1.hitokoto.cn + lunar lib</li>
+    </ul>
+
+    <h2>📜 License</h2>
+    <p>MIT License —— see <a href="../about.html">About page</a>.</p>
+
+    <p><a href="../index.html">中文版本 / Chinese Version</a></p>
+</article>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "iKindle",
+  "url": "https://kindle.91api.vip/en/",
+  "description": "6-inch Kindle E-Ink Dashboard",
+  "inLanguage": "en",
+  "publisher": {"@type": "Organization", "name": "iKindle Contributors"}
+}
+</script>
+</body>
+</html>

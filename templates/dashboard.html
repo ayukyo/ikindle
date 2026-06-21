@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="refresh" content="300">
+<title>iKindle 台历</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iKindle —— 6 寸 KINDLE 墨水屏台历仪表盘。自动定位城市、显示农历、传统节日、Hitokoto。">
+<meta name="keywords" content="kindle, dashboard, paperwhite, e-ink, 台历, 墨水屏, 桌面, 时钟, 日历, 天气">
+<meta name="robots" content="index, follow">
+<meta name="author" content="iKindle Contributors">
+
+<!-- Open Graph -->
+<meta property="og:title" content="iKindle 台历">
+<meta property="og:description" content="6 寸 KINDLE 墨水屏台历仪表盘">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kindle.91api.vip/dashboard.html">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://kindle.91api.vip/dashboard.html">
+
+<!-- Stylesheet -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="offline-banner">网络已断开，部分功能不可用</div>
+
+<header>
+    <div class="time">{{TIME}}</div>
+    <div class="date">{{DATE}}</div>
+    <div class="lunar">{{LUNAR}}</div>
+</header>
+
+<main>
+    <section class="calendar">
+        <div class="calendar-header">
+            <span>{{CALENDAR_MONTH}}</span>
+            <span>第 {{ISO_WEEK}} 周</span>
+        </div>
+        <div class="calendar-week">
+            <div class="calendar-day">日</div>
+            <div class="calendar-day">一</div>
+            <div class="calendar-day">二</div>
+            <div class="calendar-day">三</div>
+            <div class="calendar-day">四</div>
+            <div class="calendar-day">五</div>
+            <div class="calendar-day">六</div>
+        </div>
+        <div class="calendar-body">
+            {{CALENDAR}}
+        </div>
+    </section>
+
+    <section class="weather-section">
+        <div class="weather" id="weather">加载中...</div>
+        <div class="sunrise-sunset">{{SUNRISE_SUNSET}}</div>
+    </section>
+
+    <section class="hitokoto-section">
+        <div class="hitokoto" id="hitokoto">{{HITOKOTO}}</div>
+    </section>
+
+    <section class="festivals">
+        <div class="festival-today">{{FESTIVALS_TODAY}}</div>
+        <div class="countdown" id="countdown">{{COUNTDOWN}}</div>
+    </section>
+</main>
+
+<!-- KINDLE 端 ES5 客户端逻辑 -->
+<script src="app.js"></script>
+</body>
+</html>

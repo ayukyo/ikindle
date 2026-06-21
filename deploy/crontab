@@ -1,0 +1,22 @@
+# ============================================================================
+# iKindle —— cron 配置
+#
+# 部署：
+#   sudo cp deploy/crontab /etc/cron.d/ikindle
+#   sudo chmod 644 /etc/cron.d/ikindle
+#   sudo systemctl restart cron
+# ============================================================================
+
+# 环境变量
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PROJECT_DIR=/home/ikindle
+
+# 每分钟构建 dashboard.html（注入时间戳、日期、农历、日历、节日、Hitokoto、日出日落）
+* * * * * ikindle cd $PROJECT_DIR && ./build.sh >> $PROJECT_DIR/build.log 2>&1
+
+# 每日 0:00 刷新 Hitokoto 缓存
+0 0 * * * ikindle cd $PROJECT_DIR && ./refresh_hitokoto.sh >> $PROJECT_DIR/build.log 2>&1
+
+# 每 5 分钟 wttr.in 健康检测（脚本内置；如手动检测可解开下一行）
+# */5 * * * * ikindle cd $PROJECT_DIR && ./check_wttr_health.sh >> $PROJECT_DIR/build.log 2>&1

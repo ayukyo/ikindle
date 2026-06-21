@@ -1,0 +1,237 @@
+/* ============================================================================
+ * iKindle —— 墨水屏台历样式
+ *
+ * 设计目标：
+ *   - 模拟 E-Ink 墨水屏视觉效果（白底 / 纯黑 / 衬线字体）
+ *   - 适配 6 寸 KINDLE Paperwhite 4+（viewport 1072x1448）
+ *   - 禁用 CSS 变量（KINDLE WebKit 537.36 不支持）
+ *   - 禁用 CSS Grid / position: sticky（同上）
+ *   - 仅使用 Flexbox + 显式 flex 方向
+ *
+ * 响应式策略：
+ *   - 竖屏（portrait）：单列纵向堆叠
+ *   - 横屏（landscape）：左右两栏（时间 | 日历+天气）
+ *
+ * 字号体系（vw 单位适配任意 viewport）：
+ *   - .time        ~12vw（最大，远距离可读）
+ *   - .date        ~3.5vw
+ *   - .lunar       ~2.8vw
+ *   - .weather     ~2.5vw
+ *   - .calendar    ~2.4vw（单元格）
+ *   - .hitokoto    ~2.2vw
+ * ========================================================================== */
+
+/* 全局 reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    background: #ffffff;
+    color: #000000;
+    font-family: Georgia, "Times New Roman", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+    font-weight: bold;
+    -webkit-text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+/* 主体容器：单列 Flexbox 纵向堆叠 */
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4vw;
+    min-height: 100vh;
+}
+
+/* 时间区 */
+.time {
+    font-size: 12vw;
+    line-height: 1.1;
+    text-align: center;
+    margin-bottom: 2vw;
+}
+
+.date {
+    font-size: 3.5vw;
+    text-align: center;
+    margin-bottom: 0.5vw;
+}
+
+.lunar {
+    font-size: 2.8vw;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 3vw;
+}
+
+/* 日历区 */
+.calendar {
+    width: 100%;
+    max-width: 92vw;
+    margin-bottom: 3vw;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 2.6vw;
+    margin-bottom: 1vw;
+}
+
+.calendar-week {
+    display: flex;
+}
+
+.calendar-day, .calendar-blank {
+    flex: 1;
+    text-align: center;
+    font-size: 2.4vw;
+    padding: 1.2vw 0;
+    border: 0.2vw solid #ffffff;
+}
+
+.calendar-day.today {
+    border: 0.4vw solid #000000;
+    font-weight: bold;
+}
+
+.calendar-day.festival {
+    text-decoration: underline;
+}
+
+/* 天气区 */
+.weather {
+    font-size: 2.5vw;
+    text-align: center;
+    margin-bottom: 1.5vw;
+}
+
+.sunrise-sunset {
+    font-size: 2vw;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 3vw;
+}
+
+/* Hitokoto */
+.hitokoto {
+    font-size: 2.2vw;
+    text-align: center;
+    font-style: italic;
+    margin-bottom: 2vw;
+}
+
+/* 离线提示条 */
+#offline-banner {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 1vw;
+    font-size: 2vw;
+    z-index: 9999;
+}
+
+body.offline #offline-banner {
+    display: block;
+}
+
+/* 横屏适配：左右两栏 */
+@media (orientation: landscape) {
+    body {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .time, .date, .lunar {
+        width: 45%;
+    }
+
+    .time {
+        font-size: 9vw;
+    }
+
+    .calendar {
+        width: 55%;
+    }
+
+    .weather, .sunrise-sunset, .hitokoto {
+        width: 40%;
+    }
+}
+
+/* 静态页面通用样式 */
+.static-page {
+    max-width: 90vw;
+    margin: 0 auto;
+    padding: 4vw 2vw;
+}
+
+.static-page h1 {
+    font-size: 6vw;
+    margin-bottom: 4vw;
+}
+
+.static-page h2 {
+    font-size: 4vw;
+    margin-top: 4vw;
+    margin-bottom: 2vw;
+}
+
+.static-page p, .static-page li {
+    font-size: 2.6vw;
+    line-height: 1.6;
+    margin-bottom: 1.5vw;
+}
+
+.static-page code {
+    background: #f0f0f0;
+    padding: 0.2vw 0.6vw;
+    font-family: monospace;
+    font-size: 2.2vw;
+}
+
+.static-page pre {
+    background: #f0f0f0;
+    padding: 2vw;
+    overflow-x: auto;
+    font-size: 2.2vw;
+    line-height: 1.4;
+    margin-bottom: 2vw;
+}
+
+.static-page a {
+    color: #000000;
+    text-decoration: underline;
+}
+
+/* 截图展示 */
+.screenshot-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2vw;
+    margin-top: 3vw;
+}
+
+.screenshot-item {
+    flex: 1 1 30vw;
+    text-align: center;
+}
+
+.screenshot-item img {
+    width: 100%;
+    border: 0.3vw solid #000000;
+}
+
+.screenshot-item .caption {
+    font-size: 2vw;
+    margin-top: 1vw;
+}

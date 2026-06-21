@@ -1,0 +1,8 @@
+# iKindle robots.txt
+# 允许所有爬虫（Google / 百度 / Bing / 搜狗 / 360 等）
+
+User-agent: *
+Allow: /
+
+# 指向 sitemap
+Sitemap: https://kindle.91api.vip/sitemap.xml

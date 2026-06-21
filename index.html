@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>iKindle —— 6 寸 KINDLE 墨水屏台历仪表盘</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="iKindle —— 把 6 寸 KINDLE Paperwhite 4+ 改造成桌面台历仪表盘。墨水屏风格、自动定位城市、显示时间、农历、节日、天气、Hitokoto。开源、零 JS 静态 + ES5 增强。">
+<meta name="keywords" content="kindle, dashboard, paperwhite, e-ink, 台历, 墨水屏, 桌面, 时钟, 日历, 天气, 农历, 干支, 节气, hitokoto">
+<meta name="robots" content="index, follow">
+<meta name="author" content="iKindle Contributors">
+
+<!-- Open Graph -->
+<meta property="og:title" content="iKindle —— 6 寸 KINDLE 墨水屏台历">
+<meta property="og:description" content="把 6 寸 KINDLE 改造成桌面台历。墨水屏风格、自动定位城市、零 JS + ES5 增强。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kindle.91api.vip/">
+<meta property="og:image" content="https://kindle.91api.vip/assets/screenshot-home.png">
+
+<!-- Canonical -->
+<link rel="canonical" href="https://kindle.91api.vip/">
+
+<!-- Stylesheet -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<article class="static-page">
+    <h1>iKindle —— 6 寸 KINDLE 墨水屏台历</h1>
+    <p>把一台 Kindle Paperwhite 4+（2018 及更新机型）改造成<strong>桌面台历 / 信息仪表盘</strong>，利用墨水屏物理特性（不发光、护眼、可长时间显示静态画面）作为床头 / 书桌常驻屏。</p>
+
+    <h2>✨ 功能</h2>
+    <ul>
+        <li>🕐 <strong>时间</strong> —— 当前时分 + 日期副标题 + 农历（丙午年五月初六 庚寅日）</li>
+        <li>📅 <strong>日历</strong> —— 当月月历，今日加粗高亮，ISO 周数</li>
+        <li>🌦️ <strong>天气</strong> —— wttr.in 自动 IP 定位城市，每 60s 刷新</li>
+        <li>🎉 <strong>传统节日</strong> —— 春节 / 端午 / 中秋 / 国庆等</li>
+        <li>🌅 <strong>日出日落</strong> —— 实时天文数据</li>
+        <li>💬 <strong>Hitokoto</strong> —— 每日一言（每日 0:00 cron 缓存）</li>
+        <li>📴 <strong>离线提示</strong> —— 网络断开时友好降级</li>
+    </ul>
+
+    <h2>🚀 快速访问</h2>
+    <ul>
+        <li><a href="dashboard.html">📺 仪表盘</a> —— KINDLE 浏览器入口</li>
+        <li><a href="install.html">📖 部署指南</a> —— 阿里云 / 自有服务器</li>
+        <li><a href="screenshots.html">🖼️ 截图</a> —— 实物展示</li>
+        <li><a href="changelog.html">📜 更新日志</a></li>
+        <li><a href="about.html">ℹ️ 关于</a></li>
+    </ul>
+
+    <h2>🎯 目标设备</h2>
+    <p>Kindle Paperwhite 4 (2018) / KPW5 / KPW Signature / Kindle Basic 11th / Kindle Scribe（同代 Oasis / Basic 10 / Colorsoft 浏览器内核相同，亦可兼容）。</p>
+
+    <h2>📦 技术栈</h2>
+    <ul>
+        <li><strong>前端</strong>：HTML5 + CSS3 + ES5 JavaScript（KINDLE WebKit 537.36 兼容）</li>
+        <li><strong>构建</strong>：cron + bash + sed + curl + Python <code>cnlunar</code></li>
+        <li><strong>部署</strong>：阿里云 Linux + nginx + Let's Encrypt + certbot</li>
+        <li><strong>数据源</strong>：wttr.in（IP 自动定位）+ v1.hitokoto.cn + 农历计算库</li>
+    </ul>
+
+    <h2>📜 License</h2>
+    <p>MIT License —— 详见 <a href="about.html">关于页</a>。</p>
+</article>
+
+<!-- JSON-LD: WebSite + SoftwareApplication -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "iKindle",
+      "url": "https://kindle.91api.vip/",
+      "description": "6 寸 KINDLE 墨水屏台历仪表盘",
+      "inLanguage": "zh-CN",
+      "publisher": {"@type": "Organization", "name": "iKindle Contributors"}
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "iKindle Dashboard",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Kindle OS / WebKit 537.36",
+      "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+      "url": "https://kindle.91api.vip/dashboard.html",
+      "softwareRequirements": "Kindle Paperwhite 4 (2018) 或更新机型"
+    }
+  ]
+}
+</script>
+</body>
+</html>

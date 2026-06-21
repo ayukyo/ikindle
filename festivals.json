@@ -1,0 +1,29 @@
+[
+  {"date": "01-01", "label_zh": "元旦", "label_en": "New Year's Day", "type": "public", "countdown": false},
+  {"date": "02-14", "label_zh": "情人节", "label_en": "Valentine's Day", "type": "public", "countdown": false},
+  {"date": "03-08", "label_zh": "妇女节", "label_en": "Women's Day", "type": "public", "countdown": false},
+  {"date": "03-12", "label_zh": "植树节", "label_en": "Arbor Day", "type": "public", "countdown": false},
+  {"date": "04-01", "label_zh": "愚人节", "label_en": "April Fools' Day", "type": "public", "countdown": false},
+  {"date": "05-01", "label_zh": "劳动节", "label_en": "Labour Day", "type": "public", "countdown": false},
+  {"date": "05-04", "label_zh": "青年节", "label_en": "Youth Day", "type": "public", "countdown": false},
+  {"date": "06-01", "label_zh": "儿童节", "label_en": "Children's Day", "type": "public", "countdown": false},
+  {"date": "09-10", "label_zh": "教师节", "label_en": "Teacher's Day", "type": "public", "countdown": false},
+  {"date": "10-01", "label_zh": "国庆节", "label_en": "National Day", "type": "public", "countdown": false},
+  {"date": "10-31", "label_zh": "万圣夜", "label_en": "Halloween Eve", "type": "public", "countdown": false},
+  {"date": "11-01", "label_zh": "万圣节", "label_en": "Halloween", "type": "public", "countdown": false},
+  {"date": "12-24", "label_zh": "平安夜", "label_en": "Christmas Eve", "type": "public", "countdown": false},
+  {"date": "12-25", "label_zh": "圣诞节", "label_en": "Christmas Day", "type": "public", "countdown": false},
+
+  {"date": "L01-01", "label_zh": "春节", "label_en": "Chinese New Year", "type": "traditional", "countdown": true},
+  {"date": "L01-15", "label_zh": "元宵节", "label_en": "Lantern Festival", "type": "traditional", "countdown": true},
+  {"date": "L02-02", "label_zh": "龙抬头", "label_en": "Dragon Head-Raising Day", "type": "traditional", "countdown": false},
+  {"date": "L05-05", "label_zh": "端午节", "label_en": "Dragon Boat Festival", "type": "traditional", "countdown": true},
+  {"date": "L07-07", "label_zh": "七夕节", "label_en": "Qixi Festival", "type": "traditional", "countdown": false},
+  {"date": "L07-15", "label_zh": "中元节", "label_en": "Ghost Festival", "type": "traditional", "countdown": false},
+  {"date": "L08-15", "label_zh": "中秋节", "label_en": "Mid-Autumn Festival", "type": "traditional", "countdown": true},
+  {"date": "L09-09", "label_zh": "重阳节", "label_en": "Double Ninth Festival", "type": "traditional", "countdown": false},
+  {"date": "L12-08", "label_zh": "腊八节", "label_en": "Laba Festival", "type": "traditional", "countdown": false},
+  {"date": "L12-30", "label_zh": "除夕", "label_en": "Chinese New Year's Eve", "type": "traditional", "countdown": true},
+
+  {"date": "MEM-2024-09-15", "label_zh": "项目启动", "label_en": "Project Kickoff", "type": "memorial", "countdown": false}
+]
