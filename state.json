@@ -1,0 +1,193 @@
+{
+  "projectId": "ikindle",
+  "projectName": "iKindle - KINDLE 墨水屏台历仪表盘",
+  "projectType": "static-dashboard",
+  "platform": "KINDLE (E-Ink)",
+  "language": "Python + HTML/CSS/JS",
+  "status": "testing",
+  "createdAt": "2026-06-21T21:00:00+08:00",
+  "updatedAt": "2026-06-21T21:20:00+08:00",
+
+  "progress": {
+    "stage": 5,
+    "stageName": "测试验证",
+    "task": "视觉走查 + 缺陷清单",
+    "subtask": "生成 v0.1.0 视觉走查报告（9 项问题，P0×2 / P1×4 / P2×3）",
+    "subtaskIndex": 2,
+    "overallPercent": 45
+  },
+
+  "completed": {
+    "stages": ["需求分析", "技术选型", "架构设计", "原型开发", "功能实现"],
+    "tasks": [
+      "克隆仓库到本地",
+      "建立 dev-agent 项目追踪",
+      "运行首轮完整测试",
+      "修复 Python 3.6 兼容性",
+      "安装 cnlunar 依赖",
+      "新增 requirements.txt + 依赖检查",
+      "新增 refresh_hitokoto.sh 集成测试",
+      "新增 E-Ink 灰度模拟截图",
+      "完成 v0.1.0 视觉走查"
+    ],
+    "subtasks": [
+      "git clone git@github.com:ayukyo/ikindle.git",
+      "创建 state.json 初始化状态",
+      "运行 tests/run_all.sh",
+      "修复 test_build.py 中 subprocess.run 的 capture_output 兼容性",
+      "pip3 install --user cnlunar",
+      "新增 requirements.txt 钉住 cnlunar>=0.2,<1.0",
+      "run_all.sh 增加 Python 依赖检查项",
+      "新增 tests/test_hitokoto.py 覆盖 6 个集成用例",
+      "新增 tests/eink_screenshot.py 用 CSS filter 模拟灰阶墨水屏",
+      "生成 docs/visual-audit-v0.1.0.md 报告"
+    ]
+  },
+
+  "pending": {
+    "stages": [
+      "测试验证（进行中）",
+      "Bug 修复（VIS-001/002/006）",
+      "优化与加固（VIS-004/005）",
+      "部署发布"
+    ],
+    "currentTaskSubtasks": [
+      "修复 VIS-001：移除装饰性 emoji 或换成纯文字",
+      "修复 VIS-002：节日为空时加兜底文案",
+      "修复 VIS-006：刷新频率从 5min 改为 30min",
+      "修复 VIS-004：日出日落去掉 AM/PM 改 24h 制",
+      "验证 VIS-005：wttr.in 数据准确性"
+    ]
+  },
+
+  "git": {
+    "enabled": true,
+    "remote": {
+      "name": "origin",
+      "url": "git@github.com:ayukyo/ikindle.git",
+      "auth": "ssh"
+    },
+    "branch": "master",
+    "lastCommit": "860f94f",
+    "lastCommitMessage": "test: 新增 E-Ink 灰度模拟截图（更接近 KWP4 实机效果）",
+    "lastCommitTime": "2026-06-21T21:17:00+08:00",
+    "lastPush": "2026-06-21T21:17:00+08:00"
+  },
+
+  "requirements": {
+    "platform": "KINDLE 墨水屏设备",
+    "genre": "E-Ink 日历 / 仪表盘",
+    "inspiration": null,
+    "constraints": [
+      "需适配墨水屏低刷新特性",
+      "渲染产物需支持 KINDLE 浏览器",
+      "保持低功耗/轻量"
+    ]
+  },
+
+  "decisions": {
+    "pending": [
+      {
+        "id": "python-version",
+        "question": "目标 Python 版本",
+        "answer": "≥3.6（向下兼容）",
+        "reason": "测试环境是 Python 3.6.8，需保持兼容性"
+      },
+      {
+        "id": "requirements-txt",
+        "question": "是否新增 requirements.txt",
+        "answer": "是",
+        "reason": "钉住 cnlunar 等依赖，避免下次环境缺失"
+      }
+    ],
+    "made": []
+  },
+
+  "nextActions": [
+    "修复 VIS-001/002/006（P0 问题，1-2h）",
+    "修复 VIS-004/005（P1 优化，1h）",
+    "用户拿到真机后校正 VIS-008（更新走查报告）",
+    "规划 v0.2.0 功能（多城市/暗色主题/月相）"
+  ],
+
+  "testResults": {
+    "lastRun": "2026-06-21T21:17:00+08:00",
+    "summary": {
+      "total": 18,
+      "passed": 18,
+      "failed": 0,
+      "categories": {
+        "syntax": 7,
+        "json": 2,
+        "dependency": 1,
+        "unit": 2,
+        "integration": 2,
+        "endToEnd": 2,
+        "kwp4Screenshot": 1,
+        "einkGrayscale": 1
+      }
+    },
+    "issues": [
+      {
+        "id": "FIX-001",
+        "severity": "medium",
+        "description": "tests/test_build.py 用了 Python 3.7+ 才支持的 capture_output 参数",
+        "fix": "改为 stdout=PIPE / stderr=PIPE / universal_newlines=True",
+        "commit": "31f4623"
+      },
+      {
+        "id": "FIX-002",
+        "severity": "medium",
+        "description": "运行环境缺少 cnlunar 依赖，导致 lunar.py 走降级分支输出空串",
+        "fix": "pip3 install --user cnlunar",
+        "commit": null
+      }
+    ]
+  },
+
+  "visualAudit": {
+    "lastAuditAt": "2026-06-21T21:20:00+08:00",
+    "method": "Chrome headless + CSS filter grayscale(1) 模拟 16 级灰阶",
+    "viewport": "1072x1448 (KWP4)",
+    "rating": 7,
+    "report": "docs/visual-audit-v0.1.0.md",
+    "issues": [
+      {"id": "VIS-001", "priority": "P0", "title": "emoji 在 16 级灰阶下变成灰块", "effort": "30min"},
+      {"id": "VIS-002", "priority": "P0", "title": "festival-today / countdown 渲染为空", "effort": "1h"},
+      {"id": "VIS-003", "priority": "P1", "title": "横屏布局未实测", "effort": "20min"},
+      {"id": "VIS-004", "priority": "P1", "title": "日出日落 AM/PM 中文混排不规范", "effort": "15min"},
+      {"id": "VIS-005", "priority": "P1", "title": "wttr.in 日出日落时间可疑（与实际不符）", "effort": "1h"},
+      {"id": "VIS-006", "priority": "P1", "title": "5 分钟刷新频率过高缩短电池寿命", "effort": "5min"},
+      {"id": "VIS-007", "priority": "P2", "title": "vw 单位在 KINDLE 实机 viewport 下可能偏小", "effort": "2h"},
+      {"id": "VIS-008", "priority": "P2", "title": "缺少 KWP4 实机对比图", "effort": "user-dependent"},
+      {"id": "VIS-009", "priority": "P2", "title": "Hitokoto 字体可能与 KINDLE 不兼容", "effort": "1h"}
+    ]
+  },
+
+  "techDebt": [
+    {
+      "id": "TD-001",
+      "type": "dependency",
+      "description": "缺少 requirements.txt，依赖未声明（cnlunar）",
+      "impact": "medium",
+      "effort": "10min",
+      "status": "resolved",
+      "fixedIn": "92b2928"
+    },
+    {
+      "id": "TD-002",
+      "type": "test-coverage",
+      "description": "refresh_hitokoto.sh 只有语法检查，无端到端测试",
+      "impact": "low",
+      "effort": "30min",
+      "status": "resolved",
+      "fixedIn": "942a70e"
+    }
+  ],
+
+  "blockedOn": {
+    "reason": null,
+    "description": null,
+    "requiredActions": []
+  }
+}

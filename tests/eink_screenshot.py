@@ -30,6 +30,12 @@ PORT = 8769
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SCREENSHOT_DIR = "/tmp/ikindle_grayscale"
 
+# KWP4 viewport 尺寸（两种方向）
+VIEWPORTS = {
+    'portrait': (1072, 1448),   # 竖屏（默认）
+    'landscape': (1448, 1072),  # 横屏
+}
+
 GRAYSCALE_INJECT = """
 <style id="eink-mock">
 /* E-Ink 16 级灰阶模拟 */
@@ -72,24 +78,40 @@ class GrayscaleMiddlewareHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
-def screenshot():
-    """主流程"""
+def screenshot(orientation='portrait'):
+    """
+    主流程
+    :param orientation: 'portrait' (1072x1448) 或 'landscape' (1448x1072)
+    """
+    if orientation not in VIEWPORTS:
+        raise ValueError(f"orientation 必须是 {list(VIEWPORTS.keys())} 之一")
+
     os.makedirs(SCREENSHOT_DIR, exist_ok=True)
     os.chdir(PROJECT_DIR)
 
     # 启动 server
-    httpd = socketserver.TCPServer(("127.0.0.1", PORT), GrayscaleMiddlewareHandler)
+    class ReusableTCPServer(socketserver.TCPServer):
+        allow_reuse_address = True
+    httpd = ReusableTCPServer(("127.0.0.1", PORT), GrayscaleMiddlewareHandler)
+    # 显式设置 SO_REUSEADDR，避免 TIME_WAIT 导致端口占用
+    httpd.socket.setsockopt(
+        __import__('socket').SOL_SOCKET,
+        __import__('socket').SO_REUSEADDR, 1
+    )
     server_thread = threading.Thread(target=httpd.serve_forever, daemon=True)
     server_thread.start()
     time.sleep(0.5)
 
+    width, height = VIEWPORTS[orientation]
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    output_path = os.path.join(SCREENSHOT_DIR, f"kpw4_eink_{timestamp}.png")
+    output_path = os.path.join(
+        SCREENSHOT_DIR, f"kpw4_eink_{orientation}_{timestamp}.png"
+    )
 
     # Chrome 截图
     cmd = [
         'google-chrome', '--headless', '--disable-gpu', '--no-sandbox',
-        '--window-size=1072,1448', '--hide-scrollbars',
+        f'--window-size={width},{height}', '--hide-scrollbars',
         f'--screenshot={output_path}',
         f'http://127.0.0.1:{PORT}/dashboard.html'
     ]
@@ -104,17 +126,44 @@ def screenshot():
 
     if proc.returncode != 0:
         print(f"[chrome] 失败 (exit={proc.returncode}): {proc.stderr}", file=sys.stderr)
+        httpd.server_close()
         return None
 
     if not os.path.exists(output_path):
         print(f"[chrome] 截图未生成: {output_path}", file=sys.stderr)
+        httpd.server_close()
         return None
 
     size = os.path.getsize(output_path)
-    print(f"[chrome] 截图成功: {output_path} ({size} bytes)")
+    print(f"[chrome] 截图成功 ({orientation}): {output_path} ({size} bytes)")
+    httpd.server_close()
     return output_path
 
 
+def screenshot_both():
+    """截两种方向的截图（VIS-003 横屏验证）"""
+    paths = {}
+    for orient in ['portrait', 'landscape']:
+        p = screenshot(orientation=orient)
+        if p:
+            paths[orient] = p
+    return paths
+
+
 if __name__ == '__main__':
-    path = screenshot()
-    sys.exit(0 if path else 1)
+    import argparse
+    parser = argparse.ArgumentParser(description='E-Ink 灰度模拟截图')
+    parser.add_argument(
+        '--orientation', '-o',
+        choices=['portrait', 'landscape', 'both'],
+        default='portrait',
+        help='截图方向 (默认 portrait)'
+    )
+    args = parser.parse_args()
+
+    if args.orientation == 'both':
+        paths = screenshot_both()
+        sys.exit(0 if len(paths) == 2 else 1)
+    else:
+        path = screenshot(orientation=args.orientation)
+        sys.exit(0 if path else 1)

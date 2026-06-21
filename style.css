@@ -31,7 +31,11 @@
 html, body {
     background: #ffffff;
     color: #000000;
-    font-family: Georgia, "Times New Roman", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+    /* VIS-009：KINDLE Paperwhite 4 内置字体优先级提前
+     * 字体回退链：Caecilia (KINDLE 内置衬线) → Bookerly → 系统中文 → Linux 字体兜底
+     */
+    font-family: Caecilia, Bookerly, Georgia, "Times New Roman",
+                 "Source Han Serif SC", "Noto Serif CJK SC", serif;
     font-weight: bold;
     -webkit-text-size-adjust: 100%;
     overflow-x: hidden;

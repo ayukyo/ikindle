@@ -58,17 +58,30 @@ SUNRISE_SUNSET=""
 WTTR_JSON=$(curl -s --max-time 8 "https://wttr.in/?format=j1" 2>/dev/null || echo "")
 if [ -n "$WTTR_JSON" ] && command -v python3 >/dev/null 2>&1; then
     SUNRISE_SUNSET=$(echo "$WTTR_JSON" | python3 -c "
-import json, sys
+import json, sys, re
+def to_24h(s):
+    # VIS-004：wttr.in 返回 '05:45 AM' / '08:37 PM'，转 24 小时制
+    m = re.match(r'(\d{1,2}):(\d{2})\s*(AM|PM)', s.strip(), re.IGNORECASE)
+    if not m:
+        return s  # 已是非 AM/PM 格式，原样返回
+    h, mi, ap = int(m.group(1)), m.group(2), m.group(3).upper()
+    if ap == 'PM' and h != 12:
+        h += 12
+    elif ap == 'AM' and h == 12:
+        h = 0
+    return '%02d:%s' % (h, mi)
 try:
     d = json.loads(sys.stdin.read())
     today = d['weather'][0]
-    sunrise = today['astronomy'][0]['sunrise']
-    sunset = today['astronomy'][0]['sunset']
+    sunrise = to_24h(today['astronomy'][0]['sunrise'])
+    sunset = to_24h(today['astronomy'][0]['sunset'])
     print('日出 ' + sunrise + ' / 日落 ' + sunset)
 except Exception:
     pass
 " 2>/dev/null || echo "")
 fi
+# VIS-005：当前 wttr.in 默认按服务器 IP 定位（非用户城市），输出时间仅供参考。
+# 真正的城市定位功能（用户指定/自动 IP 定位）将在 v0.2.0 实现。
 log "日出日落: $SUNRISE_SUNSET"
 
 # ---- 5. 节日 / Hitokoto ----
@@ -110,7 +123,16 @@ except Exception as e:
     FEST_TODAY=$(echo "$FEST_INFO" | cut -d'|' -f1)
     COUNTDOWN=$(echo "$FEST_INFO" | cut -d'|' -f3)
     if [ -n "$FEST_TODAY" ]; then
-        FESTIVALS_TODAY="🎉 $FEST_TODAY"
+        # 注：原版此处用 🎉 emoji 装饰，但 KINDLE 墨水屏 16 级灰阶下
+        # emoji 渲染为灰块，反而干扰可读性。改为纯文字。
+        FESTIVALS_TODAY="$FEST_TODAY"
+    else
+        # VIS-002：节日为空时给兜底文案，避免 dashboard.html 显示空白区域
+        FESTIVALS_TODAY="今日无节日"
+    fi
+    if [ -z "$COUNTDOWN" ]; then
+        # 倒计时为空时兜底，避免空白
+        COUNTDOWN="近期无倒计时"
     fi
 fi
 

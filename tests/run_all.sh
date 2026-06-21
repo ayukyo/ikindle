@@ -93,7 +93,9 @@ if command -v google-chrome >/dev/null 2>&1; then
 fi
 
 # ---- 6. E-Ink 灰度模拟截图（CSS filter 模拟 16 级灰阶墨水屏）----
-run_test "E-Ink 灰度模拟截图 (eink_screenshot.py)" "python3 tests/eink_screenshot.py"
+# VIS-003：竖屏 + 横屏两种方向都截
+run_test "E-Ink 灰度模拟截图 (portrait)" "python3 tests/eink_screenshot.py --orientation portrait"
+run_test "E-Ink 灰度模拟截图 (landscape)" "python3 tests/eink_screenshot.py --orientation landscape"
 
 echo "═══════════════════════════════════════════════════════════"
 echo "  测试结果: $PASS 通过 / $FAIL 失败"
