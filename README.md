@@ -3,16 +3,18 @@
 把一台 Kindle Paperwhite 4+（2018 及更新机型）改造成**桌面台历 / 信息仪表盘**，利用墨水屏物理特性（不发光、护眼、可长时间显示静态画面、纸质阅读体验）作为床头 / 书桌常驻屏。
 
 **线上地址**：https://kindle.91api.vip/
+**当前版本**：v0.1.0（[CHANGELOG](CHANGELOG.md)）
 
 ## ✨ 功能
 
 - 🕐 **时间** —— 当前时分 + 日期副标题 + 农历（丙午年五月初六 庚寅日）
 - 📅 **日历** —— 当月月历，今日加粗高亮，ISO 周数
-- 🌦️ **天气** —— [wttr.in](https://wttr.in/) 自动 IP 定位城市，每 60s 刷新
+- 🌦️ **天气** —— [wttr.in](https://wttr.in/)（默认按服务器 IP 定位，详见已知问题）
 - 🎉 **传统节日** —— 春节 / 端午 / 中秋 / 国庆等
-- 🌅 **日出日落** —— 实时天文数据
+- 🌅 **日出日落** —— 实时天文数据（24h 制）
 - 💬 **Hitokoto** —— 每日一言（每日 0:00 cron 缓存）
 - 📴 **离线提示** —— 网络断开时友好降级
+- 🔄 **30 分钟刷新** —— 平衡墨水屏体验和电池寿命
 
 ## 📦 技术栈
 
@@ -74,6 +76,41 @@ ikindle/
 ├── LICENSE                 # MIT License
 └── README.md               # 本文件
 ```
+
+## 🧪 测试
+
+本项目有完整的自动化测试套件（19 项，CI 集成在 GitHub Actions）。
+
+```bash
+# 安装依赖（cnlunar）
+pip3 install --user -r requirements.txt
+
+# 一键运行所有测试
+bash tests/run_all.sh
+
+# 单独运行某个测试
+python3 -m unittest tests.test_build -v
+```
+
+测试覆盖：
+- Bash / Python / JS 语法检查
+- JSON 语法
+- Python 依赖可导入性
+- 单元测试（月历生成 / 节日匹配）
+- 集成测试（build.sh / refresh_hitokoto.sh 端到端）
+- E-Ink 灰度模拟截图（Chrome headless + CSS filter）
+
+## ⚠️ 已知问题
+
+详见 [docs/visual-audit-v0.1.0.md](docs/visual-audit-v0.1.0.md)。
+
+- **VIS-005（v0.2.0 修复）**：build.sh 中 wttr.in 默认按**服务器 IP 定位**（美东时间），输出对国内用户无意义。v0.2.0 将支持 `CITY` 环境变量。
+- **VIS-007（待真机图）**：CSS 使用 vw 单位，KWP4 实机 viewport（600×800 CSS px）下字号可能偏小。
+- **VIS-008（等用户）**：所有视觉走查基于 Chrome 灰度模拟，未在 KWP4 真机验证。
+
+## 📅 下一步规划
+
+详见 [docs/next-steps.md](docs/next-steps.md)。
 
 ## 🎯 目标设备
 
